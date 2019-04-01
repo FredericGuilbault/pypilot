@@ -17,7 +17,8 @@ You may want to run pypilot as a service, see the scripts/debian directory
 
 Clone the data repository and copy data
 git clone --depth 1 https://github.com/pypilot/pypilot_data
-cp -rv pypilot_data/* pypilot
+mkdir ./pypilot
+cp -rv ./pypilot_data/* ./pypilot
 
 most of the scripts can be run individually as standalone
 or test programs, some function as clients, other as servers
