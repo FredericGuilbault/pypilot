@@ -16,12 +16,15 @@ import os, sys
 import time, math, multiprocessing, select
 
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
-t0=time.monotonic()
-import vector, quaternion
-from client import pypilotClient
-from values import *
 
-from nonblockingpipe import NonBlockingPipe
+try:
+    import vector, quaternion
+    from client import pypilotClient
+    from values import *
+
+    from nonblockingpipe import NonBlockingPipe
+except:
+    import failedimports
 
 try:
     import RTIMU
@@ -125,9 +128,10 @@ class IMU(object):
                     print('setting initial gyro bias', self.gyrobias.value)
                     self.s.GyroBias = tuple(map(math.radians, self.gyrobias.value))
                     self.s.GyroBiasValid = True
-            elif t0-self.lastgyrobiastime > 10:
+            if t0-self.lastgyrobiastime > 30:
                 self.gyrobias.set(list(map(math.degrees, self.s.GyroBias)))
                 self.lastgyrobiastime = t0
+                self.s.GyroBiasValid = True
             
             self.poll()
             dt = time.monotonic() - t0
